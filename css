@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive CSS + JS Assignment</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>🎬 CSS & JavaScript Magic</h1>
+
+  <!-- Part 1: CSS Transitions & Animations -->
+  <button id="hoverBtn">Hover Me</button>
+
+  <div class="box" id="animateBox"></div>
+
+  <!-- Part 3: Trigger with JS -->
+  <button id="triggerBtn">Animate Box</button>
+
+  <div class="card" id="flipCard">
+    <div class="card-inner">
+      <div class="card-front">Front</div>
+      <div class="card-back">Back</div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin: 40px;
+}
+
+/* Part 1: Hover transition */
+#hoverBtn {
+  padding: 12px 20px;
+  border: none;
+  background: #3498db;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+#hoverBtn:hover {
+  background: #2ecc71;
+  transform: scale(1.1);
+}
+
+/* Box with animation trigger */
+.box {
+  width: 100px;
+  height: 100px;
+  margin: 30px auto;
+  background: tomato;
+  transition: transform 0.5s ease;
+}
+.box.animate {
+  animation: bounce 1s ease forwards;
+}
+
+@keyframes bounce {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-80px); }
+  100% { transform: translateY(0); }
+}
+
+/* Part 3: Card flip animation */
+.card {
+  width: 120px;
+  height: 160px;
+  perspective: 1000px;
+  margin: 30px auto;
+}
+.card-inner {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+.card.flipped .card-inner {
+  transform: rotateY(180deg);
+}
+.card-front, .card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  border: 2px solid #333;
+}
+.card-front { background: #f39c12; }
+.card-back {
+  background: #9b59b6;
+  transform: rotateY(180deg);
+}
+// ===============================
+// Part 2: JavaScript Functions
+// ===============================
+
+// Example of scope (global vs local)
+let globalCount = 0;
+
+function incrementCounter(step) {
+  // local variable
+  let localStep = step || 1;
+  globalCount += localStep;
+  return globalCount; // returns updated count
+}
+
+// Function to toggle animation class
+function triggerAnimation(elementId) {
+  let el = document.getElementById(elementId);
+  el.classList.remove("animate"); // reset
+  void el.offsetWidth; // trick to restart animation
+  el.classList.add("animate");
+}
+
+// Function to flip card
+function flipCard(elementId) {
+  let card = document.getElementById(elementId);
+  card.classList.toggle("flipped");
+}
+
+// ===============================
+// Part 3: Combine CSS + JS
+// ===============================
+document.getElementById("triggerBtn").addEventListener("click", () => {
+  let count = incrementCounter(1); // use return value
+  console.log("Animation triggered count:", count);
+  triggerAnimation("animateBox");
+});
+
+document.getElementById("flipCard").addEventListener("click", () => {
+  flipCard("flipCard");
+});
